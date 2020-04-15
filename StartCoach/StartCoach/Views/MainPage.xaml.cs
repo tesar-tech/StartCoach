@@ -31,6 +31,9 @@ namespace StartCoach.Views
             {
                 switch (id)
                 {
+                    case (int)MenuItemType.Stranka:
+                        MenuPages.Add(id, new NavigationPage(new StrankaPage()));
+                        break;
                     case (int)MenuItemType.Browse:
                         MenuPages.Add(id, new NavigationPage(new ItemsPage()));
                         break;

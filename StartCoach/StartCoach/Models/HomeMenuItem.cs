@@ -6,6 +6,7 @@ namespace StartCoach.Models
 {
     public enum MenuItemType
     {
+        Stranka,
         Browse,
         About
     }

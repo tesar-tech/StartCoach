@@ -19,7 +19,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:ItemsPage />
+                <views:StrankaPage /> <!--nastaví se defaultní stránka-->
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>

@@ -17,7 +17,6 @@ namespace StartCoach.ViewModels
         private string test = "test";
 
         public string Test { get => test; set => SetProperty(ref test, value); }
-
         public void testMethod()
         {
             Test = DateTime.Now.ToString();

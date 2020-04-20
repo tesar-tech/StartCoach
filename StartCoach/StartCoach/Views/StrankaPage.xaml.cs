@@ -16,7 +16,6 @@ namespace StartCoach.Views
         public StrankaPage()
         {
             InitializeComponent();
-            BindingContext = this;
 
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
         }

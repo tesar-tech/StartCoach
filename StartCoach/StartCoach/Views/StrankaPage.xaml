@@ -8,10 +8,13 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Button Text="Button 1"
-                VerticalOptions="CenterAndExpand"
-                HorizontalOptions="Center" />
+            <Button x:Name="PressMeButton"
+                Text="Start/Stop!"
+                Pressed="ToggleAccelerometer"/>
 
+            <Label x:Name="LabelX" HorizontalOptions="Center"/>
+            <Label x:Name="LabelY" HorizontalOptions="Center"/>
+            <Label x:Name="LabelZ" HorizontalOptions="Center"/>
 
         </StackLayout>
     </ContentPage.Content>

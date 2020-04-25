@@ -13,20 +13,21 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Button x:Name="PressMeButton"
-                Text="Start/Stop!"
-                Pressed="ToggleAccelerometer"/>
+            <Button x:Name="StartButton"
+                Text="Start"
+                Command="{Binding startCommand}"/>
 
-            <Label x:Name="LabelX" HorizontalOptions="Center"/>
-            <Label x:Name="LabelY" HorizontalOptions="Center"/>
-            <Label x:Name="LabelZ" HorizontalOptions="Center"/>
+            <Button x:Name="StopButton"
+                Text="Stop"
+                 Command="{Binding stopCommand}"/>
 
-            <Label Text="{Binding Test}" HorizontalOptions="Center"/>
+            <Label Text="{Binding Count}" HorizontalOptions="Center" FontSize="80"/>
 
-            <Button
-                Text="Start/Stop!"
-                Command="{Binding testCommand}"/>
+            <Label Text="{Binding LabelX}" HorizontalOptions="Center"/>
+            <Label Text="{Binding LabelY}" HorizontalOptions="Center"/>
+            <Label Text="{Binding LabelZ}" HorizontalOptions="Center"/>
 
+            <Label Text="{Binding LabelStop}" HorizontalOptions="Center" FontSize="Large"/>
 
 
         </StackLayout>

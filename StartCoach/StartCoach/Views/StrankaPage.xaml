@@ -13,13 +13,50 @@
     <ContentPage.Content>
         <StackLayout>
 
+
+            <Entry x:Name="entry"
+                    Text=""
+                      Placeholder="Něco napiš, mení to barvu v buttonu" 
+                  
+                   />
+
+            <Button x:Name="button" Text="Měním barvu"
+             FontSize="Large"
+                     HorizontalOptions="Center">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entry},
+                                       Path=Text.Length}"
+                     Value="1">
+                        <Setter Property="BackgroundColor" Value="Red" />
+                        <Setter Property="FontSize" Value="20" />
+                    </DataTrigger>
+                    
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entry},
+                                       Path=Text.Length}"
+                     Value="3">
+                        <Setter Property="BackgroundColor" Value="Blue" />
+                        <Setter Property="FontSize" Value="33" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
             <Button x:Name="StartButton"
                 Text="Start"
                 Command="{Binding startCommand}"/>
 
+            
             <Button x:Name="StopButton"
                 Text="Stop"
+                    IsVisible="{Binding IsStopButtonVisible}"
                  Command="{Binding stopCommand}"/>
+
+            <Button 
+                Text="Schovej Stop Button"
+                 Command="{Binding HideStopButtonCommand}"/>
+
+            <Label x:Name="labelStextem"></Label>
 
             <Label Text="{Binding Count}" HorizontalOptions="Center" FontSize="80"/>
 

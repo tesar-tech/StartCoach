@@ -14,11 +14,10 @@
         <StackLayout>
 
 
-            <Entry x:Name="entry"
-                    Text=""
-                      Placeholder="Něco napiš, mení to barvu v buttonu" 
-                  
-                   />
+  <!--      <Entry x:Name="entry"
+                 Text=""
+                 Placeholder="Něco napiš, mení to barvu v buttonu" 
+            />
 
             <Button x:Name="button" Text="Měním barvu"
              FontSize="Large"
@@ -40,32 +39,27 @@
                         <Setter Property="FontSize" Value="33" />
                     </DataTrigger>
                 </Button.Triggers>
-            </Button>
+            </Button>  -->
 
             <Button x:Name="StartButton"
                 Text="Start"
+                IsVisible="{Binding IsStartButtonVisible}"
                 Command="{Binding startCommand}"/>
 
-            
-            <Button x:Name="StopButton"
-                Text="Stop"
-                    IsVisible="{Binding IsStopButtonVisible}"
-                 Command="{Binding stopCommand}"/>
 
-            <Button 
+<!--        <Button 
                 Text="Schovej Stop Button"
-                 Command="{Binding HideStopButtonCommand}"/>
+                 Command="{Binding HideStopButtonCommand}"/> -->
 
             <Label x:Name="labelStextem"></Label>
 
-            <Label Text="{Binding Count}" HorizontalOptions="Center" FontSize="80"/>
+            <Label Text="{Binding Count}" HorizontalOptions="Center" FontSize="50"/>
+            <Label Text="{Binding LabelReactionTime}" HorizontalOptions="Center" FontSize="Large"/>
 
-            <Label Text="{Binding LabelX}" HorizontalOptions="Center"/>
-            <Label Text="{Binding LabelY}" HorizontalOptions="Center"/>
-            <Label Text="{Binding LabelZ}" HorizontalOptions="Center"/>
-
-            <Label Text="{Binding LabelStop}" HorizontalOptions="Center" FontSize="Large"/>
-
+            <Button x:Name="RetryButton"
+                Text="Retry"
+                IsVisible="{Binding IsRetryButtonVisible}"
+                Command="{Binding retryCommand}"/>
 
         </StackLayout>
     </ContentPage.Content>

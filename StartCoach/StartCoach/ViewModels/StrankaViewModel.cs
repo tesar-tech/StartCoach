@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -14,101 +16,96 @@ namespace StartCoach.ViewModels
     {
         public StrankaViewModel()
         {
-            startCommand = new Command(StartAccelerometer);
-            stopCommand = new Command(StopAccelerometer);
-            HideStopButtonCommand = new Command(ShowHideStopButton);
+            startCommand = new Command(StartAsync);
+            retryCommand = new Command(Retry);
+            HideStopButtonCommand = new Command(ShowHideRetryButton);
+            HideStartButtonCommand = new Command(ShowHideStartButton);
 
-            Accelerometer.Start(SensorSpeed.UI);
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
         }
 
-        public ICommand testCommand { get; }
         public ICommand startCommand { get; }
-        public ICommand stopCommand { get; }
+        public ICommand retryCommand { get; }
         public ICommand HideStopButtonCommand { get; }
+        public ICommand HideStartButtonCommand { get; }
 
-        private string labelStop;
-        private string labelX;
-        private string labelY;
-        private string labelZ;
+        private string labelReactionTime;
         private string count = "";
-        private int reactionTime;
-        private bool isStopButtonVisible = true;//defaultní hodnota
+        private long reactionTime;
+        private float avrg1;
+        private float avrg2;
+        private Random rnd = new Random();
+        Stopwatch swReaction = new Stopwatch();
+        private bool isRetryButtonVisible = false;//defaultní hodnota
+        private bool isStartButtonVisible = true;
 
-        public string LabelStop { get => labelStop; set => SetProperty(ref labelStop, value); }
-        public string LabelX { get => labelX; set => SetProperty(ref labelX, value); }
-        public string LabelY { get => labelY; set => SetProperty(ref labelY, value); }
-        public string LabelZ { get => labelZ; set => SetProperty(ref labelZ, value); }
+        public string LabelReactionTime { get => labelReactionTime; set => SetProperty(ref labelReactionTime, value); }
         public string Count { get => count; set => SetProperty(ref count, value); }
-        public bool IsStopButtonVisible { get => isStopButtonVisible; set => SetProperty(ref isStopButtonVisible, value); }
-        public int ReactionTime { get => reactionTime; set => SetProperty(ref reactionTime, value); }
+        public bool IsRetryButtonVisible { get => isRetryButtonVisible; set => SetProperty(ref isRetryButtonVisible, value); }
+        public bool IsStartButtonVisible { get => isStartButtonVisible; set => SetProperty(ref isStartButtonVisible, value); }
+        public long ReactionTime { get => reactionTime; set => SetProperty(ref reactionTime, value); }
 
 
 
         //nemusí být public
-        private void ShowHideStopButton()
+        private void ShowHideRetryButton()
         {
-            IsStopButtonVisible = !IsStopButtonVisible;//přehození viditelnosti 
+            IsRetryButtonVisible = !IsRetryButtonVisible;//přehození viditelnosti 
         }
 
-        public void StartAccelerometer()
+        private void ShowHideStartButton()
         {
-            Stopwatch st = new Stopwatch();
-            st.Start();
-            st.Stop();
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-               
-                if (Count == "")
-                {
-                    Count = "3";
-                    return true;
-                }
-                if (Count == "3")
-                {
-                    Count = "2";
-                    return true;
-                }
-                if (Count == "2")
-                {
-                    Count = "1";
-                    return true;
-                }
-                if (Count == "1")
-                {
-                    Count = "START";
-                    LabelStop = "Timer elapsed.";
-
-                    ReactionTime = MeasureReaction();
-                    return false;
-                }
-                else return false;
-            }); ;
-
-
+            IsStartButtonVisible = !IsStartButtonVisible;
         }
 
-        public int MeasureReaction()
+        public async void StartAsync()
         {
-            return 0;
+            ShowHideStartButton();
+
+            MakeSound("pripravit");
+            await Task.Delay(5000);
+
+            Accelerometer.Start(SensorSpeed.UI);
+            MakeSound("pozor");
+            await Task.Delay(rnd.Next(1500, 2501));
+
+            swReaction.Start();
+            MakeSound("vystrel");
+        }
+
+        public void MakeSound(String sound)
+        {
+            if (sound == "pripravit") Count = "připravit";
+            if (sound == "pozor") Count = "pozor";
+            if (sound == "vystrel") Count = "výstřel";
         }
 
         void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
         {
             var data = e.Reading;
-            LabelX = data.Acceleration.X.ToString();
-            LabelY = data.Acceleration.Y.ToString();
-            LabelZ = data.Acceleration.Z.ToString();
+            avrg1 = (data.Acceleration.X + data.Acceleration.Y + data.Acceleration.Z) / 3;
+
+            if (swReaction.IsRunning)
+            {
+                if (avrg1 > (1.05 * avrg2))
+                {
+                    swReaction.Stop();
+                    reactionTime = swReaction.ElapsedMilliseconds;
+                    LabelReactionTime = reactionTime.ToString() + " milliseconds";
+                    ShowHideRetryButton();
+                }
+            }
+            avrg2 = avrg1;
         }
 
-        public void StopAccelerometer()
+        public void Retry()
         {
             Count = "";
-            LabelStop = "";
-            Accelerometer.ReadingChanged -= Accelerometer_ReadingChanged;
+            LabelReactionTime = "";
             Accelerometer.Stop();
+            ShowHideRetryButton();
+            ShowHideStartButton();
+            swReaction.Reset();
         }
-        
- 
     }
 }

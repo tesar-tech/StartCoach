@@ -1,4 +1,5 @@
 ﻿using Android.OS;
+using StartCoach.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace StartCoach.ViewModels
 {
     public class StrankaViewModel : BaseViewModel
     {
-        public StrankaViewModel()
+        public StrankaViewModel(IAudioPlayerService audioPlayer)
         {
             startCommand = new Command(StartAsync);
             retryCommand = new Command(Retry);
@@ -22,6 +23,12 @@ namespace StartCoach.ViewModels
             HideStartButtonCommand = new Command(ShowHideStartButton);
 
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
+
+            _audioPlayer = audioPlayer;
+            _audioPlayer.OnFinishedPlaying = () => {
+                _isStopped = true;
+            };
+            _isStopped = true;
         }
 
         public ICommand startCommand { get; }
@@ -39,11 +46,15 @@ namespace StartCoach.ViewModels
         private bool isRetryButtonVisible = false;//defaultní hodnota
         private bool isStartButtonVisible = true;
 
+        private IAudioPlayerService _audioPlayer;
+        private bool _isStopped;
+
         public string LabelReactionTime { get => labelReactionTime; set => SetProperty(ref labelReactionTime, value); }
         public string Count { get => count; set => SetProperty(ref count, value); }
         public bool IsRetryButtonVisible { get => isRetryButtonVisible; set => SetProperty(ref isRetryButtonVisible, value); }
         public bool IsStartButtonVisible { get => isStartButtonVisible; set => SetProperty(ref isStartButtonVisible, value); }
         public long ReactionTime { get => reactionTime; set => SetProperty(ref reactionTime, value); }
+
 
 
 
@@ -75,9 +86,21 @@ namespace StartCoach.ViewModels
 
         public void MakeSound(String sound)
         {
-            if (sound == "pripravit") Count = "připravit";
-            if (sound == "pozor") Count = "pozor";
-            if (sound == "vystrel") Count = "výstřel";
+            if (sound == "pripravit")
+            {
+                PlayAudio("beep-07.mp3");
+                Count = "připravit";
+            }
+            if (sound == "pozor")
+            {
+                PlayAudio("beep-07.mp3");
+                Count = "pozor";
+            }
+            if (sound == "vystrel")
+            {
+                PlayAudio("beep-09.mp3");
+                Count = "výstřel";
+            }
         }
 
         void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
@@ -98,13 +121,27 @@ namespace StartCoach.ViewModels
             avrg2 = avrg1;
         }
 
+        public void PlayAudio(String audioPath)
+        {
+            if (_isStopped)
+            {
+                _isStopped = false;
+                _audioPlayer.Play(audioPath);
+            }
+            else
+            {
+                _audioPlayer.Pause();
+                _audioPlayer.Play(audioPath);
+            }
+        }
+
         public void Retry()
         {
             Count = "";
             LabelReactionTime = "";
             Accelerometer.Stop();
-            ShowHideRetryButton();
-            ShowHideStartButton();
+            IsRetryButtonVisible = true;
+            IsStartButtonVisible = false;
             swReaction.Reset();
         }
     }

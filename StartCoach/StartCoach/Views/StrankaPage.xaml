@@ -6,10 +6,6 @@
              mc:Ignorable="d"
              x:Class="StartCoach.Views.StrankaPage">
 
-    <ContentPage.BindingContext>
-        <vm:StrankaViewModel />
-    </ContentPage.BindingContext>
-
     <ContentPage.Content>
         <StackLayout>
 

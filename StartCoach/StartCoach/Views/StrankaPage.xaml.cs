@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamarin.Essentials;
+using StartCoach.Services;
+using StartCoach.ViewModels;
 
 namespace StartCoach.Views
 {
@@ -16,7 +18,7 @@ namespace StartCoach.Views
         public StrankaPage()
         {
             InitializeComponent();
-
+            BindingContext = new StrankaViewModel(DependencyService.Get<IAudioPlayerService>());
         }
         
     }

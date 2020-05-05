@@ -45,6 +45,7 @@ namespace StartCoach.ViewModels
         Stopwatch swReaction = new Stopwatch();
         private bool isRetryButtonVisible = false;//defaultní hodnota
         private bool isStartButtonVisible = true;
+        private bool isExitButtonVisible = false;
 
         private IAudioPlayerService _audioPlayer;
         private bool _isStopped;
@@ -53,6 +54,7 @@ namespace StartCoach.ViewModels
         public string Count { get => count; set => SetProperty(ref count, value); }
         public bool IsRetryButtonVisible { get => isRetryButtonVisible; set => SetProperty(ref isRetryButtonVisible, value); }
         public bool IsStartButtonVisible { get => isStartButtonVisible; set => SetProperty(ref isStartButtonVisible, value); }
+        public bool IsExitButtonVisible { get => isExitButtonVisible; set => SetProperty(ref isExitButtonVisible, value); }
         public long ReactionTime { get => reactionTime; set => SetProperty(ref reactionTime, value); }
 
 
@@ -69,9 +71,15 @@ namespace StartCoach.ViewModels
             IsStartButtonVisible = !IsStartButtonVisible;
         }
 
+        private void ShowHideExitButton()
+        {
+            IsExitButtonVisible = !IsExitButtonVisible;
+        }
+
         public async void StartAsync()
         {
             ShowHideStartButton();
+            ShowHideExitButton();
 
             MakeSound("pripravit");
             await Task.Delay(5000);
@@ -140,8 +148,9 @@ namespace StartCoach.ViewModels
             Count = "";
             LabelReactionTime = "";
             Accelerometer.Stop();
-            IsRetryButtonVisible = true;
-            IsStartButtonVisible = false;
+            IsRetryButtonVisible = false;
+            IsStartButtonVisible = true;
+            IsExitButtonVisible = false;
             swReaction.Reset();
         }
     }

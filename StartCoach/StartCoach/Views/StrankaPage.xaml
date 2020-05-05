@@ -56,6 +56,12 @@
                 Text="Retry"
                 IsVisible="{Binding IsRetryButtonVisible}"
                 Command="{Binding retryCommand}"/>
+            
+            <Button x:Name="ExitButton"
+                Text="Exit"
+                VerticalOptions="EndAndExpand"
+                IsVisible="{Binding IsExitButtonVisible}"
+                Command="{Binding retryCommand}"/>
 
         </StackLayout>
     </ContentPage.Content>

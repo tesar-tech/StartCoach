@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartCoach.Android", "Start
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartCoach.iOS", "StartCoach\StartCoach.iOS\StartCoach.iOS.csproj", "{4369F9D9-FF95-4DC3-BCF2-474660200210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartCoach", "StartCoach\StartCoach\StartCoach.csproj", "{665841B5-707E-43C7-87F6-E29E46B502C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartCoach", "StartCoach\StartCoach\StartCoach.csproj", "{665841B5-707E-43C7-87F6-E29E46B502C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

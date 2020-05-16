@@ -61,7 +61,7 @@
                 Text="Exit"
                 VerticalOptions="EndAndExpand"
                 IsVisible="{Binding IsExitButtonVisible}"
-                Command="{Binding retryCommand}"/>
+                Command="{Binding exitCommand}"/>
 
         </StackLayout>
     </ContentPage.Content>

@@ -19,10 +19,12 @@ namespace StartCoach.ViewModels
         {
             startCommand = new Command(StartAsync);
             retryCommand = new Command(Retry);
+            exitCommand = new Command(Exit);
             HideStopButtonCommand = new Command(ShowHideRetryButton);
             HideStartButtonCommand = new Command(ShowHideStartButton);
 
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
+           
 
             _audioPlayer = audioPlayer;
             _audioPlayer.OnFinishedPlaying = () => {
@@ -33,6 +35,7 @@ namespace StartCoach.ViewModels
 
         public ICommand startCommand { get; }
         public ICommand retryCommand { get; }
+        public ICommand exitCommand { get; }
         public ICommand HideStopButtonCommand { get; }
         public ICommand HideStartButtonCommand { get; }
 
@@ -58,6 +61,8 @@ namespace StartCoach.ViewModels
         public long ReactionTime { get => reactionTime; set => SetProperty(ref reactionTime, value); }
 
 
+        //zvuk jako Enumerace
+        // přehrání zvuku do Interfacu
 
 
         //nemusí být public
@@ -76,13 +81,28 @@ namespace StartCoach.ViewModels
             IsExitButtonVisible = !IsExitButtonVisible;
         }
 
+        CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private void Exit()
+        {
+            tokenSource.Cancel();
+        }
         public async void StartAsync()
         {
             ShowHideStartButton();
             ShowHideExitButton();
 
             MakeSound("pripravit");
-            await Task.Delay(5000);
+            bool returnNow = false;
+            await Task.Delay(5000, tokenSource.Token).ContinueWith(tsk =>
+            {
+                if (tokenSource.IsCancellationRequested)
+                {
+                    Retry();
+                    returnNow = true;
+                }
+            });
+            if (returnNow)
+                return;
 
             Accelerometer.Start(SensorSpeed.UI);
             MakeSound("pozor");
@@ -92,11 +112,14 @@ namespace StartCoach.ViewModels
             MakeSound("vystrel");
         }
 
+        
+
         public void MakeSound(String sound)
         {
             if (sound == "pripravit")
             {
                 PlayAudio("beep-07.mp3");
+                
                 Count = "připravit";
             }
             if (sound == "pozor")

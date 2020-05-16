@@ -8,6 +8,10 @@ namespace StartCoach.Services
     {
         void Play(string pathToAudioFile);
         void Play();
+
+        //void PlayPripravit();
+        //void PlayPozor();
+
         void Pause();
         Action OnFinishedPlaying { get; set; }
     }

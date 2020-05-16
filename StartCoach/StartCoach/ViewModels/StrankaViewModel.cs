@@ -81,32 +81,32 @@ namespace StartCoach.ViewModels
             ShowHideStartButton();
             ShowHideExitButton();
 
-            MakeSound("pripravit");
+            MakeSound(Sound.Pripravit);
             await Task.Delay(5000);
 
             Accelerometer.Start(SensorSpeed.UI);
-            MakeSound("pozor");
+            MakeSound(Sound.Pozor);
             await Task.Delay(rnd.Next(1500, 2501));
 
             swReaction.Start();
-            MakeSound("vystrel");
+            MakeSound(Sound.Vystrel);
         }
 
-        public void MakeSound(String sound)
+        public void MakeSound(Sound sound)
         {
-            if (sound == "pripravit")
+            if (sound == Sound.Pripravit)
             {
-                PlayAudio("beep-07.mp3");
+                PlayAudio(sound);
                 Count = "připravit";
             }
-            if (sound == "pozor")
+            if (sound == Sound.Pozor)
             {
-                PlayAudio("beep-07.mp3");
+                PlayAudio(sound);
                 Count = "pozor";
             }
-            if (sound == "vystrel")
+            if (sound == Sound.Vystrel)
             {
-                PlayAudio("beep-09.mp3");
+                PlayAudio(sound);
                 Count = "výstřel";
             }
         }
@@ -129,17 +129,17 @@ namespace StartCoach.ViewModels
             avrg2 = avrg1;
         }
 
-        public void PlayAudio(String audioPath)
+        public void PlayAudio(Sound sound)
         {
             if (_isStopped)
             {
                 _isStopped = false;
-                _audioPlayer.Play(audioPath);
+                _audioPlayer.Play(sound);
             }
             else
             {
                 _audioPlayer.Pause();
-                _audioPlayer.Play(audioPath);
+                _audioPlayer.Play(sound);
             }
         }
 
@@ -152,6 +152,13 @@ namespace StartCoach.ViewModels
             IsStartButtonVisible = true;
             IsExitButtonVisible = false;
             swReaction.Reset();
+        }
+
+        public enum Sound
+        {
+            Pripravit,
+            Pozor,
+            Vystrel
         }
     }
 }

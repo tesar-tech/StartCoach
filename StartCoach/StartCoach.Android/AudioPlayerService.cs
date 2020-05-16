@@ -1,8 +1,10 @@
 ﻿using System;
 using Android.Media;
+using Java.Security;
 using StartCoach.Droid;
 using StartCoach.Services;
 using Xamarin.Forms;
+using static StartCoach.ViewModels.StrankaViewModel;
 
 [assembly: Dependency(typeof(AudioPlayerService))]
 
@@ -18,15 +20,28 @@ namespace StartCoach.Droid
         {
         }
 
-        public void Play(string pathToAudioFile)
+        public void Play(Sound sound)
         {
+            String fullPath = "";
             if (_mediaPlayer != null)
             {
                 _mediaPlayer.Completion -= MediaPlayer_Completion;
                 _mediaPlayer.Stop();
             }
 
-            var fullPath = pathToAudioFile;
+            if (sound == Sound.Pripravit)
+            {
+                fullPath = "beep-07.mp3";
+            }
+            if (sound == Sound.Pozor)
+            {
+                fullPath = "beep-07.mp3";
+            }
+            if (sound == Sound.Vystrel)
+            {
+                fullPath = "beep-09.mp3";
+            }
+
 
             Android.Content.Res.AssetFileDescriptor afd = null;
 

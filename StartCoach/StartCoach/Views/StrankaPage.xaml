@@ -41,9 +41,15 @@
                 Text="Start"
                 IsVisible="{Binding IsStartButtonVisible}"
                 Command="{Binding startCommand}"/>
+            
+            <Button x:Name="ExitButton"
+                Text="Exit"
+                IsVisible="{Binding IsExitButtonVisible}"
+                Command="{Binding exitCommand}"/>
 
 
-<!--        <Button 
+
+            <!--        <Button 
                 Text="Schovej Stop Button"
                  Command="{Binding HideStopButtonCommand}"/> -->
 
@@ -57,12 +63,6 @@
                 IsVisible="{Binding IsRetryButtonVisible}"
                 Command="{Binding retryCommand}"/>
             
-            <Button x:Name="ExitButton"
-                Text="Exit"
-                VerticalOptions="EndAndExpand"
-                IsVisible="{Binding IsExitButtonVisible}"
-                Command="{Binding exitCommand}"/>
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

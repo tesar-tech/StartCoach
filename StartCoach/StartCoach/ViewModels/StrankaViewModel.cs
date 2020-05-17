@@ -52,6 +52,7 @@ namespace StartCoach.ViewModels
 
         private IAudioPlayerService _audioPlayer;
         private bool _isStopped;
+        private CancellationTokenSource tokenSource;
 
         public string LabelReactionTime { get => labelReactionTime; set => SetProperty(ref labelReactionTime, value); }
         public string Count { get => count; set => SetProperty(ref count, value); }
@@ -80,18 +81,14 @@ namespace StartCoach.ViewModels
         {
             IsExitButtonVisible = !IsExitButtonVisible;
         }
-
-        CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private void Exit()
-        {
-            tokenSource.Cancel();
-        }
+       
         public async void StartAsync()
         {
+            tokenSource = new CancellationTokenSource();
             ShowHideStartButton();
             ShowHideExitButton();
 
-            MakeSound("pripravit");
+            MakeSound(Sound.Pripravit);
             bool returnNow = false;
             await Task.Delay(5000, tokenSource.Token).ContinueWith(tsk =>
             {
@@ -105,31 +102,31 @@ namespace StartCoach.ViewModels
                 return;
 
             Accelerometer.Start(SensorSpeed.UI);
-            MakeSound("pozor");
+            MakeSound(Sound.Pozor);
             await Task.Delay(rnd.Next(1500, 2501));
 
             swReaction.Start();
-            MakeSound("vystrel");
+            MakeSound(Sound.Vystrel);
         }
 
         
 
-        public void MakeSound(String sound)
+        public void MakeSound(Sound sound)
         {
-            if (sound == "pripravit")
+            if (sound == Sound.Pripravit)
             {
-                PlayAudio("beep-07.mp3");
+                PlayAudio(sound);
                 
                 Count = "připravit";
             }
-            if (sound == "pozor")
+            if (sound == Sound.Pozor)
             {
-                PlayAudio("beep-07.mp3");
+                PlayAudio(sound);
                 Count = "pozor";
             }
-            if (sound == "vystrel")
+            if (sound == Sound.Vystrel)
             {
-                PlayAudio("beep-09.mp3");
+                PlayAudio(sound);
                 Count = "výstřel";
             }
         }
@@ -152,17 +149,17 @@ namespace StartCoach.ViewModels
             avrg2 = avrg1;
         }
 
-        public void PlayAudio(String audioPath)
+        public void PlayAudio(Sound sound)
         {
             if (_isStopped)
             {
                 _isStopped = false;
-                _audioPlayer.Play(audioPath);
+                _audioPlayer.Play(sound);
             }
             else
             {
                 _audioPlayer.Pause();
-                _audioPlayer.Play(audioPath);
+                _audioPlayer.Play(sound);
             }
         }
 
@@ -175,6 +172,25 @@ namespace StartCoach.ViewModels
             IsStartButtonVisible = true;
             IsExitButtonVisible = false;
             swReaction.Reset();
+        }
+
+        private void Exit()
+        {
+            tokenSource.Cancel();
+            Count = "";
+            LabelReactionTime = "";
+            Accelerometer.Stop();
+            IsRetryButtonVisible = false;
+            IsStartButtonVisible = true;
+            IsExitButtonVisible = false;
+            swReaction.Reset();
+        }
+
+        public enum Sound
+        {
+            Pripravit,
+            Pozor,
+            Vystrel
         }
     }
 }

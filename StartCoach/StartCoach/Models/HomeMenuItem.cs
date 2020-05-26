@@ -6,6 +6,7 @@ namespace StartCoach.Models
 {
     public enum MenuItemType
     {
+        Stranka,
         Browse,
         About
     }
@@ -14,5 +15,7 @@ namespace StartCoach.Models
         public MenuItemType Id { get; set; }
 
         public string Title { get; set; }
+
+        public double VelikostTextu { get; set; } = 20;
     }
 }

@@ -22,15 +22,21 @@ namespace StartCoach.Views
 
             MasterBehavior = MasterBehavior.Popover;
 
-            MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
+            //přidám tam první stránku.. Je to trochu nešikovné, protože defaultní stránka se 
+            //nastavuje v xamlu 
+            MenuPages.Add((int)MenuItemType.Stranka, (NavigationPage)Detail);
         }
 
         public async Task NavigateFromMenu(int id)
-        {
-            if (!MenuPages.ContainsKey(id))
+        {//tahle metoda se zavolá (z menuPage), pokud něajkou stránku opouštím
+            //v id je stránka na kterou odcházím
+            if (!MenuPages.ContainsKey(id))// pokud není ve slovníku, tak se do něj  přidá
             {
                 switch (id)
                 {
+                    case (int)MenuItemType.Stranka:
+                        MenuPages.Add(id, new NavigationPage(new StrankaPage()));
+                        break;
                     case (int)MenuItemType.Browse:
                         MenuPages.Add(id, new NavigationPage(new ItemsPage()));
                         break;
@@ -40,11 +46,12 @@ namespace StartCoach.Views
                 }
             }
 
-            var newPage = MenuPages[id];
+            var newPage = MenuPages[id];// v newPage je instance na stránku na kterou chci jít
 
-            if (newPage != null && Detail != newPage)
+            if (newPage != null && Detail != newPage) // pokud tam nejsem ...
             {
-                Detail = newPage;
+                Detail = newPage;//Detail je properta MasterDetailPage (ze které tato MainPage dědí)
+                //když se zmení Detail, tak proběhne přeskočení stránky (když tohle zakomentuješ, tak to nikam neskočí )
 
                 if (Device.RuntimePlatform == Device.Android)
                     await Task.Delay(100);

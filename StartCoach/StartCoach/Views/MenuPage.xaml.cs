@@ -20,20 +20,21 @@ namespace StartCoach.Views
 
             menuItems = new List<HomeMenuItem>
             {
+                new HomeMenuItem {Id = MenuItemType.Stranka, Title="Stránka je tu", VelikostTextu=30 },
                 new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
                 new HomeMenuItem {Id = MenuItemType.About, Title="About" }
             };
 
-            ListViewMenu.ItemsSource = menuItems;
+            ListViewMenu.ItemsSource = menuItems;// tu se to přidá do xamlu, kde jsou přístupné vlastnosti jako titulek a velikost textu.
 
             ListViewMenu.SelectedItem = menuItems[0];
-            ListViewMenu.ItemSelected += async (sender, e) =>
+            ListViewMenu.ItemSelected += async (sender, e) => // pokud se změní výběr (klikne se na položku v menu)
             {
                 if (e.SelectedItem == null)
                     return;
 
                 var id = (int)((HomeMenuItem)e.SelectedItem).Id;
-                await RootPage.NavigateFromMenu(id);
+                await RootPage.NavigateFromMenu(id);//root page je mainPage, ta si ošéfuje změnu stránky.
             };
         }
     }

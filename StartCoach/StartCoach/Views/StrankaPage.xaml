@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vm="clr-namespace:StartCoach.ViewModels"
+             mc:Ignorable="d"
+             x:Class="StartCoach.Views.StrankaPage">
+
+    <ContentPage.Content>
+        <StackLayout>
+
+
+  <!--      <Entry x:Name="entry"
+                 Text=""
+                 Placeholder="Něco napiš, mení to barvu v buttonu" 
+            />
+
+            <Button x:Name="button" Text="Měním barvu"
+             FontSize="Large"
+                     HorizontalOptions="Center">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entry},
+                                       Path=Text.Length}"
+                     Value="1">
+                        <Setter Property="BackgroundColor" Value="Red" />
+                        <Setter Property="FontSize" Value="20" />
+                    </DataTrigger>
+                    
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entry},
+                                       Path=Text.Length}"
+                     Value="3">
+                        <Setter Property="BackgroundColor" Value="Blue" />
+                        <Setter Property="FontSize" Value="33" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>  -->
+
+            <Button x:Name="StartButton"
+                Text="Start"
+                IsVisible="{Binding IsStartButtonVisible}"
+                Command="{Binding startCommand}"/>
+            
+            <Button x:Name="ExitButton"
+                Text="Exit"
+                IsVisible="{Binding IsExitButtonVisible}"
+                Command="{Binding exitCommand}"/>
+
+
+
+            <!--        <Button 
+                Text="Schovej Stop Button"
+                 Command="{Binding HideStopButtonCommand}"/> -->
+
+            <Label x:Name="labelStextem"></Label>
+
+            <Label Text="{Binding Count}" HorizontalOptions="Center" FontSize="50"/>
+            <Label Text="{Binding LabelReactionTime}" HorizontalOptions="Center" FontSize="Large"/>
+
+            <Button x:Name="RetryButton"
+                Text="Retry"
+                IsVisible="{Binding IsRetryButtonVisible}"
+                Command="{Binding retryCommand}"/>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

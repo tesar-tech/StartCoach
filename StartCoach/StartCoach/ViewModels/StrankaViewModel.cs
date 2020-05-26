@@ -109,25 +109,23 @@ namespace StartCoach.ViewModels
             MakeSound(Sound.Vystrel);
         }
 
-        
+        Dictionary<Sound, string> soundCommands = new Dictionary<Sound, string>()
+        {
+            { Sound.Pozor,"pozor" },{ Sound.Pripravit,"připravit" },{ Sound.Vystrel,"výstřel" },
+        };
 
         public void MakeSound(Sound sound)
         {
-            if (sound == Sound.Pripravit)
+            Count = soundCommands[sound];
+            if (_isStopped)
             {
-                PlayAudio(sound);
-                
-                Count = "připravit";
+                _isStopped = false;
+                _audioPlayer.Play(sound);
             }
-            if (sound == Sound.Pozor)
+            else
             {
-                PlayAudio(sound);
-                Count = "pozor";
-            }
-            if (sound == Sound.Vystrel)
-            {
-                PlayAudio(sound);
-                Count = "výstřel";
+                _audioPlayer.Pause();
+                _audioPlayer.Play(sound);
             }
         }
 
@@ -147,20 +145,6 @@ namespace StartCoach.ViewModels
                 }
             }
             avrg2 = avrg1;
-        }
-
-        public void PlayAudio(Sound sound)
-        {
-            if (_isStopped)
-            {
-                _isStopped = false;
-                _audioPlayer.Play(sound);
-            }
-            else
-            {
-                _audioPlayer.Pause();
-                _audioPlayer.Play(sound);
-            }
         }
 
         public void Retry()
